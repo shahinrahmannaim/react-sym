@@ -1,0 +1,63 @@
+.recipeDetail {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.recipeDetail h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.recipeImage {
+    display: block;
+    max-width: 70%;
+    height: auto;
+    margin: 0 auto;
+    border-radius: 8px;
+}
+
+.recipeMeta {
+    margin-top: 20px;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+.recipeMeta span {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.recipeActions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.btnEdit {
+    background-color: #4caf50;
+    color: white;
+}
+
+.btnDelete {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
