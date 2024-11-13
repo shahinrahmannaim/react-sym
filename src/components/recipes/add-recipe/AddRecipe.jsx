@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import apiClient from "../../../interceptor/Interceptor";
 import CategoryService from "../../../services/category/CategoryService"; // Import CategoryService
-import styles from "./EditRecipe.module.css";
+import styles from "./AddRecipe.module.css";
 
-const EditRecipe = () => {
-	const { id } = useParams();
+const AddRecipe = () => {
 	const [recipe, setRecipe] = useState({
 		title: "",
 		content: "",
@@ -28,29 +27,6 @@ const EditRecipe = () => {
 		};
 		fetchCategories();
 	}, []);
-
-	// Fetch recipe details for editing
-	useEffect(() => {
-		if (id) {
-			fetchRecipeDetails(id);
-		}
-	}, [id]);
-
-	const fetchRecipeDetails = async (id) => {
-		try {
-			const response = await apiClient.get(`/recette/${id}`);
-			const res = response.data;
-			setRecipe({
-				title: res.title,
-				content: res.content,
-				duration: res.duration,
-				thumbnailFile: res.thumbnailFile || "",
-				categoryId: res.categoryId, // Preset categoryId for edit
-			});
-		} catch (error) {
-			console.error("Error fetching recipe details:", error);
-		}
-	};
 
 	const handleChange = (e) => {
 		const { name, value } = e.target;
@@ -83,23 +59,22 @@ const EditRecipe = () => {
 		}
 
 		try {
-			await apiClient.post(`/recette/edit/${id}`, formData, {
-				// Changed to PUT
+			await apiClient.post("/recette/create", formData, {
 				headers: {
 					"Content-Type": "multipart/form-data",
 				},
 			});
-			alert("Recipe updated successfully");
+			alert("Recipe added successfully");
 			navigate("/recipes");
 		} catch (error) {
-			console.error("Error updating recipe:", error);
-			alert("An error occurred while updating the recipe.");
+			console.error("Error adding recipe:", error);
+			alert("An error occurred while adding the recipe.");
 		}
 	};
 
 	return (
-		<div className={styles.recipeEdit}>
-			<h1>Edit Recipe</h1>
+		<div className={styles.recipeAdd}>
+			<h1>Add Recipe</h1>
 			<form onSubmit={handleSubmit}>
 				<div className={styles.formGroup}>
 					<label htmlFor="title">Title</label>
@@ -137,15 +112,19 @@ const EditRecipe = () => {
 
 				<div className={styles.formGroup}>
 					<label htmlFor="categoryId">Category</label>
+
 					<select
 						id="categoryId"
 						name="categoryId"
 						value={recipe.categoryId}
 						onChange={handleChange}
 						required>
+						<option value="" disabled>
+							Select a category
+						</option>
 						{categories.map((category) => (
-							<option key={category.id} value={category.id}>
-								{category ? category.name : "Loading..."}
+							<option key={category.id} value="{category.id}">
+								{category.name}
 							</option>
 						))}
 					</select>
@@ -174,12 +153,12 @@ const EditRecipe = () => {
 					) : null}
 				</div>
 
-				<button type="submit" className={styles.btnSubmit}>
-					Update Recipe
+				<button type="submit" className={styles.button}>
+					Add Recipe
 				</button>
 			</form>
 		</div>
 	);
 };
 
-export default EditRecipe;
+export default AddRecipe;

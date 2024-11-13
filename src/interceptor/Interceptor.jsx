@@ -1,7 +1,5 @@
-// src/axiosInterceptor.js
 import axios from "axios";
 import JWTTokenService from "../services/JWTTokenService/JWTTokenService";
-
 
 // Create an instance of Axios
 const apiClient = axios.create({

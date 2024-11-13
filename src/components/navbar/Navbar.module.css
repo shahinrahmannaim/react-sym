@@ -37,3 +37,8 @@
 .menu a:hover {
     color: #ddd;
 }
+
+.logoutButton {
+    cursor: pointer;
+
+}

@@ -1,6 +1,6 @@
 /* Recipes.module.css */
 
-/* Center the container and add margins */
+/* Container for all content */
 .container {
     display: flex;
     justify-content: center;
@@ -30,15 +30,22 @@
 .recipeThumbnail {
     flex-shrink: 0;
     width: 150px;
-    height: auto;
+    /* Fixed width for image container */
+    height: 150px;
+    /* Fixed height for image container */
     margin-right: 20px;
 }
 
 .recipeThumbnail img {
     width: 100%;
-    height: auto;
+    /* Ensures image stretches to fill the container */
+    height: 100%;
+    /* Ensures image fills the height of the container */
     border-radius: 4px;
     object-fit: cover;
+    /* Ensures the image covers the container without distortion */
+    object-position: center;
+    /* Keeps the image centered */
 }
 
 /* Content area styling */
@@ -47,9 +54,10 @@
     margin: 0;
 }
 
-.recipeContent h2 {
-    margin-top: 0;
-    margin-bottom: 10px;
+.recipeTitle {
+    cursor: pointer;
+    color: #007bff;
+    text-decoration: underline;
 }
 
 .recipeContent p {
@@ -68,12 +76,6 @@
     font-size: 14px;
 }
 
-/* Optional: add a border or separator if desired */
-.recipeMeta span:not(:last-child) {
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-}
-
 /* Action buttons styling */
 .recipeActions {
     margin-top: 15px;
@@ -81,10 +83,6 @@
 
 .recipeActions .btn {
     margin-right: 10px;
-}
-
-/* Button styling */
-.btn {
     padding: 8px 15px;
     border: none;
     border-radius: 4px;
@@ -101,21 +99,7 @@
     background-color: #f44336;
 }
 
-.detailButton {
-    background-color: rgb(84, 209, 153);
-    color: black;
-    border: none;
-    width: 90px;
-    height: 30px;
-    border-radius: 10px;
-}
-
-.defaultImage {
-    width: 100%;
-    height: 100px;
-    object-fit: cover;
-}
-
+/* Add recipe button styling */
 .btnAdd {
     padding: 10px 20px;
     color: white;
@@ -132,4 +116,15 @@
 
 .btnPrimaryAdd:hover {
     background-color: #142b45;
+}
+
+.recipeImage {
+    width: 100%;
+    /* Ensures images stretch to fill the container width */
+    height: 100%;
+    /* Ensures images fill the height of the container */
+    object-fit: cover;
+    /* Ensures images cover the container without distortion */
+    object-position: center;
+    /* Centers the image */
 }

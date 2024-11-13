@@ -1,4 +1,4 @@
-import { jwtDecode } from "jwt-decode";
+import {jwtDecode} from "jwt-decode"; // Correct the import to just "jwtDecode" (not "jwtDecode" in braces)
 
 class JWTTokenService {
 	constructor() {
@@ -32,14 +32,13 @@ class JWTTokenService {
 
 	// Get the decoded token
 	getDecodedToken() {
-		// If no decoded token, decode it
 		if (!this.decodedToken) {
 			this.decodeToken();
 		}
 		return this.decodedToken;
 	}
 
-	// Get specific information from the token (e.g., username)
+	// Get specific information from the token (e.g., user)
 	getUser() {
 		const decoded = this.getDecodedToken();
 		return decoded ? decoded["username"] : null;
@@ -62,14 +61,14 @@ class JWTTokenService {
 
 	// Utility to extract roles from the token
 	extractRoles() {
-		const decodedToken = this.getDecodedToken();
+		const decodedToken = this.getDecodedToken(); // Always use the decoded token
 		const roles = decodedToken?.["roles"];
 		if (typeof roles === "string") {
 			return [roles];
 		} else if (Array.isArray(roles)) {
 			return roles;
 		}
-		return [];
+		return []; // Return an empty array if no roles are found
 	}
 
 	// Clear the token on logout
@@ -80,4 +79,6 @@ class JWTTokenService {
 	}
 }
 
-export default new JWTTokenService();
+// Export a single instance of JWTTokenService
+const JWTTokenServiceInstance = new JWTTokenService();
+export default JWTTokenServiceInstance;

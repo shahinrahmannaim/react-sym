@@ -1,8 +1,5 @@
-// src/components/ProtectedRoute.js
-
 import { Navigate } from "react-router-dom";
 import JWTTokenService from "../../services/JWTTokenService/JWTTokenService";
-
 
 const ProtectedRoute = ({ children, requiredRole }) => {
 	const token = JWTTokenService.getToken();

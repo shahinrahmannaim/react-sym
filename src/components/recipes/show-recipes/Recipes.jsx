@@ -38,6 +38,20 @@ const Recipes = () => {
 			console.error("Invalid recipe or ID");
 		}
 	};
+    const deleteRecipe = async (id) => {
+			if (id) {
+				try {
+					await apiClient.delete(`/recette/delete/${id}`); // Use the custom axiosClient
+					alert("Recipe deleted successfully!");
+                    setRecipeList((prevList) =>
+											prevList.filter((recipe) => recipe.id !== id)
+										);
+					navigate("/recipes");
+				} catch (error) {
+					console.error("Error deleting recipe:", error);
+				}
+			}
+		};
 
 	return (
 		<div className={styles.container}>
@@ -45,7 +59,7 @@ const Recipes = () => {
 				{/* Add Recipe Button */}
 				<div className={styles.recipeActions}>
 					<a
-						href="/add-recipe"
+						href="/recipe/add"
 						className={`${styles.btnAdd} ${styles.btnPrimaryAdd}`}>
 						Add Recipe
 					</a>
@@ -76,7 +90,6 @@ const Recipes = () => {
 								<p>{recipe.description}</p>
 								<div className={styles.recipeMeta}>
 									<span>Duration: {recipe.duration}</span>
-									
 								</div>
 								<div className={styles.recipeActions}>
 									<button
@@ -84,7 +97,7 @@ const Recipes = () => {
 										onClick={() => goToRecipe(recipe)}>
 										View
 									</button>
-									<button className={`${styles.btn} ${styles.btnDelete}`}>
+									<button onClick={()=>deleteRecipe(recipe.id)} className={`${styles.btn} ${styles.btnDelete}`}>
 										Delete
 									</button>
 								</div>

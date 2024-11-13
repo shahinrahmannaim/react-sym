@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import apiClient from "../../../interceptor/Interceptor"; // Import the custom Axios instance with the interceptor
+import CategoryService from "../../../services/category/CategoryService"; 
 import styles from "./DetailsRecipe.module.css"; // Import the CSS module
 
 const DetailsRecipe = () => {
 	const { id } = useParams(); // Get the recipe ID from the URL
 	const [recipe, setRecipe] = useState(null);
+	const [category, setCategory] = useState(null); // State for category
 	const navigate = useNavigate();
 
-	// Fetch recipe details
+	// Fetch recipe and category details
 	useEffect(() => {
 		if (id) {
 			fetchRecipeDetails(id);
@@ -35,8 +37,23 @@ const DetailsRecipe = () => {
 
 			// Set the fetched recipe data
 			setRecipe(res);
+
+			// Fetch the category if recipe has a category ID
+			if (res.category) {
+				fetchCategoryDetails(res.category);
+			}
 		} catch (error) {
 			console.error("Error fetching recipe details:", error);
+		}
+	};
+
+	// Fetch category details
+	const fetchCategoryDetails = async (categoryId) => {
+		try {
+			const response = await CategoryService.getCategory(categoryId);
+			setCategory(response.data);
+		} catch (error) {
+			console.error("Error fetching category details:", error);
 		}
 	};
 
@@ -83,6 +100,9 @@ const DetailsRecipe = () => {
 				<span>
 					<strong>Updated At:</strong>{" "}
 					{new Date(recipe.updatedAt).toLocaleDateString()}
+				</span>
+				<span>
+					<strong>Category:</strong> {category ? category.name : "Loading..."}
 				</span>
 			</div>
 

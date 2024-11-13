@@ -1,14 +1,19 @@
-
 import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./Navbar.module.css";
+import { useAuth } from "../../services/JWTTokenService/AuthContext"; // Ensure correct import
 
 function Navbar() {
 	const navigate = useNavigate();
-	const isAuthenticated = !!localStorage.getItem("token"); // Check if user is logged in
+	const auth = useAuth(); // Access authentication context
 
+	// Ensure auth is properly defined
+	const isAuthenticated = auth?.isAuthenticated ?? false;
+	const logout = auth?.logout ?? (() => {}); // Fallback to a no-op function if undefined
+
+	// Handle logout functionality
 	const handleLogout = () => {
-		localStorage.removeItem("token");
-		navigate("/login");
+		logout(); // Logout via context
+		navigate("/login"); // Redirect to login page
 	};
 
 	return (
@@ -28,6 +33,7 @@ function Navbar() {
 							Home
 						</NavLink>
 					</li>
+					{/* Show Login/Register links if user is not authenticated */}
 					{!isAuthenticated ? (
 						<>
 							<li>
@@ -46,10 +52,11 @@ function Navbar() {
 							</li>
 						</>
 					) : (
+						// Show Logout if user is authenticated
 						<li>
-							<button onClick={handleLogout} className={styles.logoutButton}>
+							<span onClick={handleLogout} className={styles.logoutButton}>
 								Logout
-							</button>
+							</span>
 						</li>
 					)}
 				</ul>

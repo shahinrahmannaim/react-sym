@@ -1,4 +1,4 @@
-import {axios} from "axios";
+import axios from "axios";
 
 class DepartmentService {
 	// Set the base API URL
