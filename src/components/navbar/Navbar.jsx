@@ -19,7 +19,7 @@ function Navbar() {
 	return (
 		<nav className={styles.navbar}>
 			<div className={styles.logo}>
-				<NavLink to="/" end>
+				<NavLink to="/recipes" end>
 					MyApp
 				</NavLink>
 			</div>
@@ -27,7 +27,7 @@ function Navbar() {
 				<ul>
 					<li>
 						<NavLink
-							to="/"
+							to="/recipes"
 							end
 							className={({ isActive }) => (isActive ? styles.active : "")}>
 							Home

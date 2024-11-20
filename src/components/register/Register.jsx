@@ -1,5 +1,5 @@
 import  { useState, useEffect } from "react";
-import DepartmentService from "../../services/department-service/DepartmentServoce"; // Adjust the path accordingly
+import DepartmentService from "../../services/department-service/DepartmentService"; // Adjust the path accordingly
 import styles from "./Register.module.css"; // Importing the CSS module
 
 const Register = () => {

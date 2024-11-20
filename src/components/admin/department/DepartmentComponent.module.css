@@ -1,0 +1,71 @@
+.departmentContainer {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+}
+
+.departmentForm {
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.departmentForm input {
+    padding: 8px;
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.departmentForm button {
+    padding: 8px 16px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.departmentList {
+    list-style: none;
+    padding: 0;
+}
+
+.departmentListItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: white;
+    margin-bottom: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.departmentInfo {
+    flex-grow: 1;
+}
+
+.actions {
+    display: flex;
+    gap: 10px;
+}
+
+.button {
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+}
+
+.editButton {
+    background-color: #ffc107;
+    /* Yellow for Edit button */
+}
+
+.deleteButton {
+    background-color: #dc3545;
+    /* Red for Delete button */
+}

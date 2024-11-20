@@ -3,32 +3,28 @@ import apiClient from "../../interceptor/Interceptor";
 
 
 class CategoryService {
-   
-  
-
 	// Fetch all categories
 	getCategories() {
 		return apiClient.get("/categories");
 	}
+	// Get details for a specific category by ID
+	getCategory(id) {
+		return apiClient.get(`/category/${id}`);
+	}
 
 	// Create a new category
 	createCategory(category) {
-		return apiClient.post("/categories/create", category);
+		return apiClient.post("/category/create", category);
 	}
 
 	// Update an existing category by ID
 	updateCategory(id, category) {
-		return apiClient.put(`/categories/edit/${id}`, category);
+		return apiClient.put(`/category/edit/${id}`, category);
 	}
 
 	// Delete a category by ID
 	deleteCategory(id) {
-		return apiClient.delete(`/categories/delete/${id}`);
-	}
-
-	// Get details for a specific category by ID
-	getCategory(id) {
-		return apiClient.get(`/categories/${id}`);
+		return apiClient.delete(`/category/delete/${id}`);
 	}
 }
 

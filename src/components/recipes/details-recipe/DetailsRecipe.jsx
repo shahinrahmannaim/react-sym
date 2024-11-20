@@ -1,14 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import apiClient from "../../../interceptor/Interceptor"; // Import the custom Axios instance with the interceptor
-import CategoryService from "../../../services/category/CategoryService"; 
+import CategoryService from "../../../services/category/CategoryService";
 import styles from "./DetailsRecipe.module.css"; // Import the CSS module
+import AuthContext from "../../../services/JWTTokenService/AuthContext"; // Import AuthContext
 
 const DetailsRecipe = () => {
 	const { id } = useParams(); // Get the recipe ID from the URL
 	const [recipe, setRecipe] = useState(null);
 	const [category, setCategory] = useState(null); // State for category
 	const navigate = useNavigate();
+	const { userRoles } = useContext(AuthContext); // Get user roles from context
 
 	// Fetch recipe and category details
 	useEffect(() => {
@@ -57,16 +59,26 @@ const DetailsRecipe = () => {
 		}
 	};
 
+	// Edit recipe
 	const onEdit = (recipeId) => {
-		navigate(`/recipe/edit/${recipeId}`);
+		if (userRoles.includes("ROLE_ADMIN")) {
+			navigate(`/admin/recipe/edit/${recipeId}`); // Redirect to admin edit page
+		} else {
+			navigate(`/recipe/edit/${recipeId}`); // Redirect to user edit page
+		}
 	};
 
+	// Delete recipe
 	const deleteRecipe = async () => {
 		if (id) {
 			try {
 				await apiClient.delete(`/recette/delete/${id}`); // Use the custom axiosClient
 				alert("Recipe deleted successfully!");
-				navigate("/recipes");
+				if (userRoles.includes("ROLE_ADMIN")) {
+					navigate("/admin/recipes"); // Redirect to admin panel
+				} else {
+					navigate("/recipes"); // Redirect to the user recipe list
+				}
 			} catch (error) {
 				console.error("Error deleting recipe:", error);
 			}

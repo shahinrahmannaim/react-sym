@@ -1,0 +1,56 @@
+.categoryContainer {
+    padding: 20px;
+}
+
+.categoryForm {
+    margin-bottom: 20px;
+}
+
+.categoryForm input {
+    padding: 10px;
+    margin-right: 10px;
+    width: 200px;
+}
+
+.categoryForm button {
+    padding: 10px;
+}
+
+.categoryList {
+    list-style: none;
+    padding: 0;
+}
+
+.categoryList li {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.categoryInfo {
+    font-size: 16px;
+}
+
+.actions button {
+    padding: 5px 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-right: 10px;
+}
+
+.editButton {
+    background-color: #f0ad4e;
+    color: white;
+}
+
+.deleteButton {
+    background-color: #d9534f;
+    color: white;
+}
+
+.editButton:hover,
+.deleteButton:hover {
+    opacity: 0.8;
+}

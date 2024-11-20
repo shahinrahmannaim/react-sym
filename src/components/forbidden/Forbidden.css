@@ -1,0 +1,22 @@
+/* ForbiddenComponent.css */
+.forbidden-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f8d7da;
+    color: #721c24;
+    text-align: center;
+    border: 1px solid #f5c6cb;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.forbidden-container h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.forbidden-container p {
+    font-size: 1.2rem;
+}

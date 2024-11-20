@@ -1,41 +1,41 @@
+// AuthContext.jsx
 import { createContext, useState, useContext, useEffect } from "react";
-import JWTTokenService from "../../services/JWTTokenService/JWTTokenService";
+import JWTTokenService from "./JWTTokenService"; // Adjust the import path as needed
 
+// Create the Auth context
 const AuthContext = createContext();
 
+// Create the AuthProvider component
 export const AuthProvider = ({ children }) => {
 	const [isAuthenticated, setIsAuthenticated] = useState(false);
 	const [userRoles, setUserRoles] = useState([]);
 
 	useEffect(() => {
-		// Check if there's a token in localStorage on mount
 		const token = JWTTokenService.getToken();
-		const isTokenExpired = JWTTokenService.isTokenExpired();
-
-		if (token && !isTokenExpired) {
-			// If token exists and is valid, set authentication state
+		if (token && !JWTTokenService.isTokenExpired()) {
 			setIsAuthenticated(true);
 			const decodedToken = JWTTokenService.getDecodedToken();
 			const roles = JWTTokenService.extractRoles(decodedToken);
 			setUserRoles(roles);
 		} else {
-			// If token is expired or invalid, clear the token and reset state
 			JWTTokenService.clearToken();
 			setIsAuthenticated(false);
 			setUserRoles([]);
 		}
-	}, []); // Empty dependency array ensures this runs once when the component mounts
+	}, []);
 
-	const login = () => {
+	const login = (token) => {
+		JWTTokenService.setToken(token);
+		const decodedToken = JWTTokenService.getDecodedToken();
+		const roles = JWTTokenService.extractRoles(decodedToken);
 		setIsAuthenticated(true);
-		const roles = JWTTokenService.extractRoles(); // Extract roles during login
-		setUserRoles(roles);
+		setUserRoles(roles); // Explicitly set state here to trigger re-render
 	};
 
 	const logout = () => {
-		JWTTokenService.clearToken(); // Clear token on logout
+		JWTTokenService.clearToken();
 		setIsAuthenticated(false);
-		setUserRoles([]); // Clear roles on logout
+		setUserRoles([]);
 	};
 
 	return (
@@ -45,5 +45,8 @@ export const AuthProvider = ({ children }) => {
 	);
 };
 
-// Custom hook to access authentication context
+
+// Custom hook to use the Auth context
 export const useAuth = () => useContext(AuthContext);
+
+export default AuthContext;

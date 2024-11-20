@@ -1,15 +1,26 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../../../interceptor/Interceptor"; // Import the apiClient
 import styles from "./Recipes.module.css"; // Import CSS Module
+import AuthContext from "../../../services/JWTTokenService/AuthContext"; // Import AuthContext to access user roles
+import JWTTokenService from "../../../services/JWTTokenService/JWTTokenService"; // Import JWTTokenService to check token validity
 
 const Recipes = () => {
 	const [recipeList, setRecipeList] = useState([]);
+	const [loading, setLoading] = useState(true); // Loading state for fetching recipes
+	const [error, setError] = useState(null); // Error state for error handling
+	const { userRoles } = useContext(AuthContext); // Get the user's roles from context
 	const navigate = useNavigate();
 
 	useEffect(() => {
+		// Check if the token is valid before fetching data
+		if (JWTTokenService.isTokenExpired()) {
+			JWTTokenService.removeToken();
+			navigate("/login");
+			return;
+		}
 		fetchRecipes();
-	}, []);
+	}, [navigate]);
 
 	// Fetch recipes using the apiClient
 	const fetchRecipes = async () => {
@@ -25,49 +36,71 @@ const Recipes = () => {
 				: [];
 			setRecipeList(recipes);
 		} catch (error) {
+			setError("Error fetching recipes. Please try again later.");
 			console.error("Error fetching recipes:", error);
-			setRecipeList([]); // Optionally handle the error by setting an empty array or showing an error message
+		} finally {
+			setLoading(false);
 		}
 	};
 
 	// Navigate to the recipe details page
 	const goToRecipe = (recipe) => {
 		if (recipe && recipe.id) {
-			navigate(`/recipe/${recipe.id}`);
+			const path = userRoles.includes("ROLE_ADMIN")
+				? `/admin/recipe/${recipe.id}` // Admin path
+				: `/recipe/${recipe.id}`; // User path
+			navigate(path);
 		} else {
 			console.error("Invalid recipe or ID");
 		}
 	};
-    const deleteRecipe = async (id) => {
-			if (id) {
-				try {
-					await apiClient.delete(`/recette/delete/${id}`); // Use the custom axiosClient
-					alert("Recipe deleted successfully!");
-                    setRecipeList((prevList) =>
-											prevList.filter((recipe) => recipe.id !== id)
-										);
-					navigate("/recipes");
-				} catch (error) {
-					console.error("Error deleting recipe:", error);
-				}
+
+	// Delete recipe
+	const deleteRecipe = async (id) => {
+		if (id && userRoles.includes("ROLE_ADMIN")) {
+			// Only allow delete for admin
+			try {
+				await apiClient.delete(`/recette/delete/${id}`); // Use the custom axiosClient
+				alert("Recipe deleted successfully!");
+				setRecipeList((prevList) =>
+					prevList.filter((recipe) => recipe.id !== id)
+				);
+			} catch (error) {
+				setError("Error deleting recipe. Please try again later.");
+				console.error("Error deleting recipe:", error);
 			}
-		};
+		} else {
+			alert("You do not have permission to delete this recipe.");
+		}
+	};
 
 	return (
 		<div className={styles.container}>
 			<div className={styles.recipeList}>
-				{/* Add Recipe Button */}
-				<div className={styles.recipeActions}>
-					<a
-						href="/recipe/add"
-						className={`${styles.btnAdd} ${styles.btnPrimaryAdd}`}>
-						Add Recipe
-					</a>
-				</div>
+				{/* Add Recipe Button (only for admins) */}
+				{userRoles.includes("ROLE_ADMIN") && (
+					<div className={styles.recipeActions}>
+						<a
+							href={
+								userRoles.includes("ROLE_ADMIN")
+									? "/admin/recipe/add"
+									: "/recipe/add"
+							} // Conditional href based on user role
+							className={`${styles.btnAdd} ${styles.btnPrimaryAdd}`}>
+							Add Recipe
+						</a>
+					</div>
+				)}
 				<br />
 				<hr />
-				{/* Conditional rendering for recipe list */}
-				{recipeList.length > 0 ? (
+				{/* Error Handling */}
+				{error && <div className={styles.error}>{error}</div>}
+
+				{/* Loading state */}
+				{loading ? (
+					<div>Loading recipes...</div>
+				) : // Conditional rendering for recipe list
+				recipeList.length > 0 ? (
 					recipeList.map((recipe) => (
 						<div key={recipe.id} className={styles.recipeCard}>
 							<div className={styles.recipeThumbnail}>
@@ -97,9 +130,13 @@ const Recipes = () => {
 										onClick={() => goToRecipe(recipe)}>
 										View
 									</button>
-									<button onClick={()=>deleteRecipe(recipe.id)} className={`${styles.btn} ${styles.btnDelete}`}>
-										Delete
-									</button>
+									{userRoles.includes("ROLE_ADMIN") && (
+										<button
+											onClick={() => deleteRecipe(recipe.id)}
+											className={`${styles.btn} ${styles.btnDelete}`}>
+											Delete
+										</button>
+									)}
 								</div>
 							</div>
 						</div>
